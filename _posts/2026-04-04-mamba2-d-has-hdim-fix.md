@@ -9,6 +9,7 @@ date: 2026-04-04
 Mamba2 is a state space model (SSM). In a transformer architecture, every token peeks at every other token using the attention mechanism, causing linear growth in the transformer's KV cache (the store of every past token's key and value) and quadratic growth in attention computation. In contrast, SSM uses a fixed size hidden state vector $h$, allowing for both constant memory and compute:
 
 $$h_t = A \cdot h_{t-1} + B \cdot x_t$$
+
 $$y_t = C \cdot h_t + D \cdot x_t$$
 
 The hidden state $h$ carries information forward through time, similarly to the attention mechanism. At each step it decays by $A$, gets new input through $B$, and produces output through $C$. The skip connection $D$ lets input pass directly to the output.
