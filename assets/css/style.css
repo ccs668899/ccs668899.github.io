@@ -1,70 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Latin+Modern+Roman:ital,wght@0,400;0,700;1,400&display=swap');
+
 :root {
-  --bg: #fafaf8;
-  --text: #2d2d3a;
-  --text-secondary: #666;
-  --link: #0550ae;
-  --code-bg: #f0f2f4;
-  --code-border: rgba(0,0,0,0.08);
-  --border: #e0e0e0;
-  --blockquote: #555;
+  --bg: #fff;
+  --text: #000;
+  --text-secondary: #555;
+  --link: #000;
+  --code-bg: #f5f5f5;
+  --code-border: #ddd;
+  --border: #000;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #1a1a2e;
-    --text: #d0d0d8;
-    --text-secondary: #888;
-    --link: #58a6ff;
-    --code-bg: #252540;
-    --code-border: rgba(255,255,255,0.06);
-    --border: #333;
-    --blockquote: #999;
+    --bg: #1a1a1a;
+    --text: #d4d4d4;
+    --text-secondary: #999;
+    --link: #d4d4d4;
+    --code-bg: #222;
+    --code-border: #444;
+    --border: #d4d4d4;
   }
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: Charter, 'Bitstream Charter', Georgia, serif;
-  font-size: 18px;
-  line-height: 1.6;
+  font-family: 'Latin Modern Roman', 'Computer Modern', 'CMU Serif', Georgia, serif;
+  font-size: 12pt;
+  line-height: 1.5;
   color: var(--text);
   background: var(--bg);
   max-width: 720px;
   margin: 0 auto;
   padding: 2rem 1.5rem;
-  -webkit-font-smoothing: antialiased;
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
 }
 
-h1 { font-size: 2rem; margin-bottom: 0.5rem; }
-h2 { font-size: 1.5rem; margin-top: 2rem; margin-bottom: 0.5rem; }
-h3 { font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+h1 {
+  font-size: 17pt;
+  text-align: center;
+  margin-bottom: 0.3em;
+}
 
-p, ul, ol { margin-bottom: 0.9em; }
-ul, ol { padding-left: 1.5rem; }
+h2 {
+  font-size: 14pt;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  counter-increment: section;
+}
 
-a { color: var(--link); text-decoration: none; }
-a:hover { text-decoration: underline; }
+h2::before {
+  content: counter(section) ". ";
+}
+
+h3 {
+  font-size: 12pt;
+  margin-top: 1em;
+  margin-bottom: 0.3em;
+}
+
+body { counter-reset: section; }
+
+p, ul, ol { margin-bottom: 0.8em; }
+ul, ol { padding-left: 2em; }
+
+a { color: var(--link); text-decoration: underline; }
+a:hover { text-decoration: none; }
 
 code {
-  font-family: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', Consolas, monospace;
-  font-size: 0.875em;
+  font-family: 'Latin Modern Mono', 'CMU Typewriter Text', 'Courier New', monospace;
+  font-size: 0.9em;
   background: var(--code-bg);
-  padding: 0.15em 0.3em;
-  border-radius: 3px;
+  padding: 0.1em 0.25em;
+  border-radius: 2px;
 }
 
 pre {
+  font-family: 'Latin Modern Mono', 'CMU Typewriter Text', 'Courier New', monospace;
   font-size: 0.85em;
-  line-height: 1.45;
+  line-height: 1.4;
   background: var(--code-bg);
   border: 1px solid var(--code-border);
-  border-radius: 4px;
-  padding: 1em 1.25em;
+  border-radius: 0;
+  padding: 0.8em 1em;
   overflow-x: auto;
-  margin: 1.75em -1.5rem;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  margin: 1.5em 0;
+  text-align: left;
 }
 
 pre code {
@@ -74,25 +97,39 @@ pre code {
 }
 
 blockquote {
-  border-left: 3px solid var(--border);
-  padding-left: 1rem;
-  color: var(--blockquote);
-  margin-bottom: 0.9em;
+  margin: 1em 2em;
+  font-style: italic;
 }
 
 img { max-width: 100%; }
 
-.date { color: var(--text-secondary); font-size: 0.9rem; }
-.post-list { list-style: none; padding: 0; }
-.post-list li { margin-bottom: 0.75rem; }
-.post-list .date { margin-right: 0.5rem; }
+.date {
+  color: var(--text-secondary);
+  font-size: 11pt;
+  text-align: center;
+  display: block;
+  margin-bottom: 1.5em;
+}
 
-nav { margin-bottom: 2rem; }
-nav a { margin-right: 1rem; }
+.post-list { list-style: none; padding: 0; text-align: left; }
+.post-list li { margin-bottom: 0.5em; }
+.post-list .date { display: inline; margin-right: 0.5em; }
 
-hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+nav {
+  margin-bottom: 1.5em;
+  font-size: 10pt;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+nav a { margin-right: 1em; }
+
+hr {
+  border: none;
+  border-top: 0.5pt solid var(--border);
+  margin: 1.5em 0;
+}
 
 mjx-container[display="true"],
 .MathJax_Display {
-  margin: 1.25em 0 !important;
+  margin: 1em 0 !important;
 }
