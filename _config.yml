@@ -1,0 +1,6 @@
+title: ipnon
+description: Noetic Engineering
+url: https://ipnon.github.io
+markdown: kramdown
+kramdown:
+  math_engine: null
