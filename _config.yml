@@ -4,3 +4,5 @@ url: https://ipnon.github.io
 markdown: kramdown
 kramdown:
   math_engine: null
+  syntax_highlighter: rouge
+highlighter: rouge

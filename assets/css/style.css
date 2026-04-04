@@ -1,23 +1,23 @@
 @import url('https://cdn.jsdelivr.net/gh/lalten/lmweb@main/style/latinmodern-roman.css');
 
 :root {
-  --bg: #fff;
-  --text: #000;
+  --bg: #fcfcfa;
+  --text: #111;
   --text-secondary: #555;
-  --link: #000;
-  --code-bg: #f5f5f5;
-  --code-border: #ddd;
-  --border: #000;
+  --link: #111;
+  --code-bg: #f4f3ef;
+  --code-border: #e0dfd8;
+  --border: #111;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #1a1a1a;
+    --bg: #1c1c1e;
     --text: #d4d4d4;
     --text-secondary: #999;
     --link: #d4d4d4;
-    --code-bg: #222;
-    --code-border: #444;
+    --code-bg: #252527;
+    --code-border: #3a3a3c;
     --border: #d4d4d4;
   }
 }
@@ -30,12 +30,17 @@ body {
   line-height: 1.5;
   color: var(--text);
   background: var(--bg);
-  max-width: 720px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 2rem 1.5rem;
   text-align: justify;
   hyphens: auto;
   -webkit-hyphens: auto;
+}
+
+h1, h2, h3 {
+  hyphens: none;
+  -webkit-hyphens: none;
 }
 
 h1 {
@@ -72,14 +77,11 @@ a:hover { text-decoration: none; }
 code {
   font-family: 'Latin Modern Mono', 'CMU Typewriter Text', 'Courier New', monospace;
   font-size: 0.9em;
-  background: var(--code-bg);
-  padding: 0.1em 0.25em;
-  border-radius: 2px;
 }
 
 pre {
   font-family: 'Latin Modern Mono', 'CMU Typewriter Text', 'Courier New', monospace;
-  font-size: 0.85em;
+  font-size: 0.8em;
   line-height: 1.4;
   background: var(--code-bg);
   border: 1px solid var(--code-border);
@@ -132,4 +134,35 @@ hr {
 mjx-container[display="true"],
 .MathJax_Display {
   margin: 1em 0 !important;
+}
+
+/* Rouge syntax highlighting */
+.highlight .k, .highlight .kd, .highlight .kn,
+.highlight .kp, .highlight .kr, .highlight .kt { color: #8959a8; }
+.highlight .s, .highlight .s1, .highlight .s2,
+.highlight .sb, .highlight .sc, .highlight .sd,
+.highlight .sh, .highlight .sx { color: #718c00; }
+.highlight .c, .highlight .c1, .highlight .cm,
+.highlight .cs, .highlight .cp { color: #8e908c; font-style: italic; }
+.highlight .nb, .highlight .bp { color: #4271ae; }
+.highlight .nf, .highlight .nc { color: #3e999f; }
+.highlight .mi, .highlight .mf, .highlight .mh,
+.highlight .mo, .highlight .il { color: #f5871f; }
+.highlight .o, .highlight .ow { color: #3e999f; }
+.highlight .nn { color: #c82829; }
+
+@media (prefers-color-scheme: dark) {
+  .highlight .k, .highlight .kd, .highlight .kn,
+  .highlight .kp, .highlight .kr, .highlight .kt { color: #c792ea; }
+  .highlight .s, .highlight .s1, .highlight .s2,
+  .highlight .sb, .highlight .sc, .highlight .sd,
+  .highlight .sh, .highlight .sx { color: #c3e88d; }
+  .highlight .c, .highlight .c1, .highlight .cm,
+  .highlight .cs, .highlight .cp { color: #676e95; font-style: italic; }
+  .highlight .nb, .highlight .bp { color: #82aaff; }
+  .highlight .nf, .highlight .nc { color: #89ddff; }
+  .highlight .mi, .highlight .mf, .highlight .mh,
+  .highlight .mo, .highlight .il { color: #f78c6c; }
+  .highlight .o, .highlight .ow { color: #89ddff; }
+  .highlight .nn { color: #ff5370; }
 }
