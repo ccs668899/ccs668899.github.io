@@ -12,11 +12,11 @@ We quantize to reduce memory footprint and bandwidth, and to unlock faster low-p
 
 There are many different quantization formats, but why? And which do we pick? This is a bit out of the scope of this post, but it suffices to say that each format lives somewhere along the independent dimensions of accuracy, throughput, and memory, and choosing which to use is mostly a matter of experimentation.
 
-For the purposes of this report, we need only concern ourselves with `w4a8`. W4A8 is groupwise-scaled signed-INT4 weights paired with per-tensor (or per-token) FP8 E4M3 activations, computed on FP8 tensor cores with an FP32 accumulator and a fused $s_W s_A$ output rescale. See the following bit trace:
+For the purposes of this report, we need only concern ourselves with `w4a8`. W4A8 is groupwise-scaled signed-INT4 weights paired with per-tensor (or per-token) FP8 E4M3 activations, computed on FP8 tensor cores with an FP32 accumulator and a fused $s_W s_A$ output rescale. See the following bit trace[a][b][c][d]:
 
 ```asm
 0. Pack the weights into memory before inference.
-  w0 = -3 -> 0b1101 in 4-bit two's complement [a]
+  w0 = -3 -> 0b1101 in 4-bit two's complement
   w1 =  5 -> 0b0101
   packed = (w1 << 4)   | (w0 & 0x0F)
          = 0b0101_0000 | 0b0000_1101
@@ -25,7 +25,7 @@ For the purposes of this report, we need only concern ourselves with `w4a8`. W4A
          
 1. Load from memory.
   weight: 0101_1101 (0x5D, packed into `uint8_t` holding w0=-3 and w1=5)
-  activation: [0][0111][100] = +1.5 in FP8 E4M3 [b]
+  activation: [0][0111][100] = +1.5 in FP8 E4M3
               S=0, Exp=0b0111=7, bias=7, exp=0, Man=0b100
               (-1)^0 * 2^(0) * (1 + (0.5 + 0 + 0)) = 1.5
 
@@ -41,10 +41,10 @@ For the purposes of this report, we need only concern ourselves with `w4a8`. W4A
   w0f = (float)(-3) * s_W = -3 * 1.75 = -5.25
   w1f = (float)(5)  * s_W = 5  * 1.75 = 8.75
 
-4. Promote the activation in the registers. [c]
+4. Promote the activation in the registers.
   a0 = (float)1.5 = 1.5
 
-5. Compute the partial inner product in the FP32 accumulator. [d]
+5. Compute the partial inner product in the FP32 accumulator.
   acc += a0 * w0f = 1.5 * -5.25 = -7.875
 
 6. Rescale the output.
@@ -216,6 +216,8 @@ Man = 0b110 -> 1 (implicit leading 1) + 0.5 + 0.25 = 1.75 = significand
 c. The astute reader will note that this step is unnecessary on any device supporting FP8 MMA, which is ~10% of deployed devices as of writing. We promote to FP32 for purposes of pedagogy.
 
 d. This is a single step in what would continue over the entire K dimension. A tutorial on the entire process can be found at https://siboehm.com/articles/22/CUDA-MMM.
+
+## References
 
 0. [flashinfer-ai/flashinfer#2564](https://github.com/flashinfer-ai/flashinfer/pull/2564).
 
