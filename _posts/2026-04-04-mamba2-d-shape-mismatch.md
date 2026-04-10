@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Fixing a Forward/Step Inconsistency in Mamba2's D Parameter
+title: Shape Mismatch Between Forward and Step in Mamba2's D Parameter
 date: 2026-04-04
 ---
 
