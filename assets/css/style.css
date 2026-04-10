@@ -27,7 +27,7 @@
 
 body {
   font-family: 'Latin Modern Roman', 'Computer Modern', 'CMU Serif', Georgia, serif;
-  font-size: 1.125rem;
+  font-size: 1rem;
   line-height: 1.5;
   color: var(--text);
   background: var(--bg);
@@ -71,12 +71,12 @@ a:hover { text-decoration: none; }
 
 code {
   font-family: 'JetBrains Mono', 'Latin Modern Mono', 'CMU Typewriter Text', 'Courier New', monospace;
-  font-size: 0.875rem;
+  font-size: 1rem;
 }
 
 pre {
   font-family: 'JetBrains Mono', 'Latin Modern Mono', 'CMU Typewriter Text', 'Courier New', monospace;
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.4;
   background: var(--code-bg);
   border: 1px solid var(--code-border);
