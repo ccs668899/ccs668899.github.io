@@ -12,7 +12,7 @@ We quantize to reduce memory footprint and bandwidth, and to unlock faster low-p
 
 There are many different quantization formats, but why? And which do we pick? This is a bit out of the scope of this post, but it suffices to say that each format lives somewhere along the independent dimensions of accuracy, throughput, and memory, and choosing which to use is mostly a matter of experimentation.
 
-For the purposes of this report, we need only concern ourselves with W4A8. W4A8 is groupwise-scaled signed-INT4 weights paired with per-tensor (or per-token) FP8 E4M3 activations, computed on FP8 tensor cores with an FP32 accumulator and a fused $s_W s_A$ output rescale. See the following bit trace<sup>a,b,c,d</sup>:
+For the purposes of this report, we need only concern ourselves with W4A8. W4A8 is groupwise-scaled signed-INT4 weights paired with per-tensor (or per-token) FP8 E4M3 activations, computed on FP8 tensor cores with an FP32 accumulator and a fused $s_W s_A$ output rescale. See the following bit trace (see notes a, b, c, d):
 
 ```asm
 0. Pack the weights into memory before inference.
