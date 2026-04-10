@@ -12,7 +12,7 @@ We quantize to reduce memory footprint and bandwidth, and to unlock faster low-p
 
 There are many different quantization formats, but why? And which do we pick? This is a bit out of the scope of this post, but it suffices to say that each format lives somewhere along the independent dimensions of accuracy, throughput, and memory, and choosing which to use is mostly a matter of experimentation.
 
-For the purposes of this report, we need only concern ourselves with W4A8. W4A8 is groupwise-scaled signed-INT4 weights paired with per-tensor (or per-token) FP8 E4M3 activations, computed on FP8 tensor cores with an FP32 accumulator and a fused $s_W s_A$ output rescale. See the following bit trace[a][b][c][d]:
+For the purposes of this report, we need only concern ourselves with W4A8. W4A8 is groupwise-scaled signed-INT4 weights paired with per-tensor (or per-token) FP8 E4M3 activations, computed on FP8 tensor cores with an FP32 accumulator and a fused $s_W s_A$ output rescale. See the following bit trace<sup>a,b,c,d</sup>:
 
 ```asm
 0. Pack the weights into memory before inference.
@@ -190,7 +190,7 @@ A separate issue is that a dispatch table has measurable overhead, and FlashInfe
 
 ## Notes
 
-[a] *4-bit two's complement* means you have 1 sign bit and 3 magnitude bits. A simple way to think of it is that setting each bit contributes the corresponding integer to the overall sum in this array: `[-8, 4, 2, 1]`, where `-8` is referred to as the "minimum representable value". An occasionally useful property of this format is that you can apply the composition of the bitwise-not function and plus-one function to negate any number:
+<sup>a</sup> *4-bit two's complement* means you have 1 sign bit and 3 magnitude bits. A simple way to think of it is that setting each bit contributes the corresponding integer to the overall sum in this array: `[-8, 4, 2, 1]`, where `-8` is referred to as the "minimum representable value". An occasionally useful property of this format is that you can apply the composition of the bitwise-not function and plus-one function to negate any number:
 
 ```asm
 3 = 0b0011
@@ -202,7 +202,7 @@ A separate issue is that a dispatch table has measurable overhead, and FlashInfe
 3 = 0b0011
 ```
 
-[b] *FP8 E4M3* means you have 1 sign bit, 4 exponent bits and 3 mantissa bits: `[S][E3 E2 E1 E0][M2 M1 M0]`. The bias is 7, which means to find the actual exponent we subtract 7 from the value of the exponent bits. An implicit leading 1 is prepended to the mantissa; a simple way to think of it is that setting each bit adds the corresponding term of the geometric sequence 2^(-i) to the rational 1 = 2^0: `[1/2, 1/4, 1/8]`. We compute every value as (-1)^S * 2^(Exp - 7) * (1 + M/8). Consider the following example:
+<sup>b</sup> *FP8 E4M3* means you have 1 sign bit, 4 exponent bits and 3 mantissa bits: `[S][E3 E2 E1 E0][M2 M1 M0]`. The bias is 7, which means to find the actual exponent we subtract 7 from the value of the exponent bits. An implicit leading 1 is prepended to the mantissa; a simple way to think of it is that setting each bit adds the corresponding term of the geometric sequence 2^(-i) to the rational 1 = 2^0: `[1/2, 1/4, 1/8]`. We compute every value as (-1)^S * 2^(Exp - 7) * (1 + M/8). Consider the following example:
 
 ```asm
 [1][1000][110]
@@ -213,18 +213,18 @@ Man = 0b110 -> 1 (implicit leading 1) + 0.5 + 0.25 = 1.75 = significand
 (-1)^1 * 2^1 * 1.75 = -3.5
 ```
 
-[c] The astute reader will note that this step is unnecessary on any device supporting FP8 MMA, which is ~10% of deployed devices as of writing. We promote to FP32 for purposes of pedagogy.
+<sup>c</sup> The astute reader will note that this step is unnecessary on any device supporting FP8 MMA, which is ~10% of deployed devices as of writing. We promote to FP32 for purposes of pedagogy.
 
-[d] This is a single step in what would continue over the entire K dimension. A tutorial on the entire process can be found at https://siboehm.com/articles/22/CUDA-MMM.
+<sup>d</sup> This is a single step in what would continue over the entire K dimension. A tutorial on the entire process can be found at https://siboehm.com/articles/22/CUDA-MMM.
 
 ## References
 
-[0] [flashinfer-ai/flashinfer#2564](https://github.com/flashinfer-ai/flashinfer/pull/2564).
+<sup>0</sup> [flashinfer-ai/flashinfer#2564](https://github.com/flashinfer-ai/flashinfer/pull/2564).
 
-[1] [flashinfer-ai/flashinfer#2501](https://github.com/flashinfer-ai/flashinfer/issues/2501).
+<sup>1</sup> [flashinfer-ai/flashinfer#2501](https://github.com/flashinfer-ai/flashinfer/issues/2501).
 
-[2] Lin et al., [AWQ: Activation-aware Weight Quantization for LLM Compression and Acceleration](https://arxiv.org/abs/2306.00978).
+<sup>2</sup> Lin et al., [AWQ: Activation-aware Weight Quantization for LLM Compression and Acceleration](https://arxiv.org/abs/2306.00978).
 
-[3] NVIDIA, [`examples/24_gemm_grouped/gemm_grouped.cu`](https://github.com/NVIDIA/cutlass/blob/main/examples/24_gemm_grouped/gemm_grouped.cu) and [`include/cutlass/gemm/device/gemm_grouped.h`](https://github.com/NVIDIA/cutlass/blob/main/include/cutlass/gemm/device/gemm_grouped.h).
+<sup>3</sup> NVIDIA, [`examples/24_gemm_grouped/gemm_grouped.cu`](https://github.com/NVIDIA/cutlass/blob/main/examples/24_gemm_grouped/gemm_grouped.cu) and [`include/cutlass/gemm/device/gemm_grouped.h`](https://github.com/NVIDIA/cutlass/blob/main/include/cutlass/gemm/device/gemm_grouped.h).
 
-[4] Ye et al., [FlashInfer: Efficient and Customizable Attention Engine for LLM Inference Serving](https://arxiv.org/abs/2501.01005).
+<sup>4</sup> Ye et al., [FlashInfer: Efficient and Customizable Attention Engine for LLM Inference Serving](https://arxiv.org/abs/2501.01005).
