@@ -1,7 +1,6 @@
 ---
 layout: post
 title: Shape Mismatch Between Forward and Step in Mamba2's D Parameter
-date: 2026-04-04
 ---
 
 Mamba2 is a state space model (SSM). In a transformer architecture, every token peeks at every other token using the attention mechanism, causing linear growth in the transformer's KV cache (the store of every past token's key and value) and quadratic growth in attention computation. In contrast, SSM uses a fixed size hidden state vector $h$, allowing for both constant memory and compute:
